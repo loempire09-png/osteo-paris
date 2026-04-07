@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agent TikTok Osteo Paris</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #141414;
+    --surface2: #1c1c1c;
+    --border: rgba(255,255,255,0.08);
+    --accent: #c8f135;
+    --accent-dim: rgba(200,241,53,0.1);
+    --text: #f0f0f0;
+    --muted: #666;
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    padding: 2rem 1rem 4rem;
+  }
+  .wrap { max-width: 700px; margin: 0 auto; }
+  header { margin-bottom: 2.5rem; padding-top: 1rem; }
+  .eyebrow {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.6rem;
+  }
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.8rem, 6vw, 2.6rem);
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+  h1 span { color: var(--accent); }
+  .subtitle { font-size: 14px; color: var(--muted); line-height: 1.6; }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .card-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); display: inline-block; }
+  .dot-orange { background: #f97316; }
+  input[type="password"], input[type="text"] {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    padding: 13px 16px;
+    transition: border-color 0.2s;
+  }
+  input:focus { outline: none; border-color: rgba(200,241,53,0.5); }
+  input::placeholder { color: var(--muted); }
+  .api-hint {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 8px;
+    line-height: 1.5;
+  }
+  .api-hint a { color: var(--accent); text-decoration: none; }
+  .save-row { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+  .btn-save {
+    padding: 9px 18px;
+    background: var(--accent-dim);
+    color: var(--accent);
+    border: 1px solid rgba(200,241,53,0.25);
+    border-radius: 8px;
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: background 0.2s;
+  }
+  .btn-save:hover { background: rgba(200,241,53,0.18); }
+  .saved-badge {
+    font-size: 12px;
+    color: var(--accent);
+    display: none;
+  }
+  textarea {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.75;
+    padding: 14px 16px;
+    resize: vertical;
+    min-height: 150px;
+    transition: border-color 0.2s;
+  }
+  textarea:focus { outline: none; border-color: rgba(200,241,53,0.5); }
+  textarea::placeholder { color: var(--muted); font-style: italic; }
+  .actions { display: flex; gap: 10px; align-items: center; margin-top: 1rem; flex-wrap: wrap; }
+  .btn-main {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 26px;
+    background: var(--accent);
+    color: #0a0a0a;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    transition: opacity 0.2s, transform 0.15s;
+  }
+  .btn-main:hover { opacity: 0.88; }
+  .btn-main:active { transform: scale(0.97); }
+  .btn-main:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .btn-copy {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 16px;
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+  }
+  .btn-copy:hover { background: var(--surface2); border-color: rgba(255,255,255,0.15); }
+  .btn-copy.copied { color: var(--accent); border-color: rgba(200,241,53,0.3); }
+  .status { font-size: 13px; color: var(--muted); }
+  .loading-bar { height: 2px; background: var(--border); border-radius: 2px; overflow: hidden; margin-top: 1rem; display: none; }
+  .loading-bar.active { display: block; }
+  .loading-bar-inner { height: 100%; background: var(--accent); border-radius: 2px; animation: load 1.6s ease-in-out infinite; width: 40%; }
+  @keyframes load { 0% { transform: translateX(-100%); } 100% { transform: translateX(350%); } }
+  .versions-grid { display: none; gap: 1rem; margin-top: 0.5rem; }
+  .versions-grid.visible { display: grid; }
+  .version-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+  }
+  .version-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .version-tag {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-dim);
+    border: 1px solid rgba(200,241,53,0.2);
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+  .version-text {
+    font-size: 14px;
+    line-height: 1.85;
+    color: var(--text);
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .footer {
+    margin-top: 3rem;
+    text-align: center;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Agent TikTok</div>
+    <h1>Osteo <span>Paris</span></h1>
+    <p class="subtitle">Colle un script viral, genere 4 versions uniques pretes pour ElevenLabs.</p>
+  </header>
+
+  <div class="card">
+    <div class="card-label"><span class="dot dot-orange"></span>Cle API Anthropic</div>
+    <input type="password" id="api-key-input" placeholder="sk-ant-api03-..." />
+    <p class="api-hint">Ta cle est sauvegardee uniquement sur ton appareil. Elle ne passe jamais par internet. <a href="https://console.anthropic.com/settings/keys" target="_blank">Obtenir une cle sur console.anthropic.com</a></p>
+    <div class="save-row">
+      <button class="btn-save" onclick="saveKey()">Sauvegarder la cle</button>
+      <span class="saved-badge" id="saved-badge">Cle sauvegardee.</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label"><span class="dot"></span>Script viral de reference</div>
+    <textarea id="viral-input" placeholder="Colle ici le script viral dont tu veux t'inspirer..."></textarea>
+    <div class="actions">
+      <button class="btn-main" id="gen-btn" onclick="generateScripts()">Generer 4 versions</button>
+      <span class="status" id="status-msg"></span>
+    </div>
+    <div class="loading-bar" id="loading-bar"><div class="loading-bar-inner"></div></div>
+  </div>
+
+  <div class="versions-grid" id="versions-grid">
+    <div class="version-card">
+      <div class="version-header">
+        <span class="version-tag">Version 1</span>
+        <button class="btn-copy" onclick="copyVersion(1, this)">Copier</button>
+      </div>
+      <div class="version-text" id="v1"></div>
+    </div>
+    <div class="version-card">
+      <div class="version-header">
+        <span class="version-tag">Version 2</span>
+        <button class="btn-copy" onclick="copyVersion(2, this)">Copier</button>
+      </div>
+      <div class="version-text" id="v2"></div>
+    </div>
+    <div class="version-card">
+      <div class="version-header">
+        <span class="version-tag">Version 3</span>
+        <button class="btn-copy" onclick="copyVersion(3, this)">Copier</button>
+      </div>
+      <div class="version-text" id="v3"></div>
+    </div>
+    <div class="version-card">
+      <div class="version-header">
+        <span class="version-tag">Version 4</span>
+        <button class="btn-copy" onclick="copyVersion(4, this)">Copier</button>
+      </div>
+      <div class="version-text" id="v4"></div>
+    </div>
+  </div>
+
+  <div class="footer">Agent TikTok Osteo Paris</div>
+</div>
+
+<script>
+const SYSTEM_PROMPT = `Tu es un agent TikTok osteopathie faceless France, ciblant un public parisien.
+
+CONSIGNE DE FORMATAGE OBLIGATOIRE
+Le script genere doit etre entierement brut, sans aucune mise en forme. Pas de slash, pas de tirets narratifs, pas de points de suspension, pas de guillemets, pas de parentheses, pas de crochets, pas de caracteres speciaux. Uniquement des phrases simples separees par des virgules ou des points. Le texte doit pouvoir etre colle directement sur ElevenLabs sans aucune retouche.
+
+CONSIGNE DE GENERATION MULTIPLE
+Tu dois generer exactement 4 versions differentes du script. Chaque version doit avoir un prenom different, un metier different, une zone de douleur differente, une reference parisienne differente comme une rue, une station de metro ou une boulangerie, et une chute finale differente. Les 4 versions doivent etre clairement separees et numerotees VERSION 1, VERSION 2, VERSION 3, VERSION 4. Chaque version doit etre complete et autonome, prete a etre collee directement sur ElevenLabs.
+
+ANCRES CULTURELLES PARISIENNES OBLIGATOIRES
+Dans chaque version, tu dois integrer au minimum 2 references parmi ces categories.
+Boulangeries et patisseries : la tarte au citron de Cyril Lignac rue de Chaillot, un paris-brest de chez Laduree sur les Champs-Elysees, une viennoiserie de chez Paul, un eclair de chez Fauchon place de la Madeleine, une brioche de chez Poilane rue du Cherche-Midi, un croissant de la boulangerie du 11eme.
+Stations de metro et rues parisiennes : la ligne 13 aux heures de pointe, le RER A a Chatelet-Les Halles, la station Opera, la rue de Rivoli, le boulevard Haussmann, la rue Montorgueil, le marche d Aligre dans le 12eme, la place de la Republique, le canal Saint-Martin dans le 10eme.
+Enseignes et commerces du quotidien : la caissiere du Monoprix du 15eme, le rayon surgeles du Leclerc, la queue au Biocoop du 9eme, le self de la cantine administrative, le bureau de poste du 18eme.
+Habitudes francaises parisiennes : le marche dominical du boulevard Raspail, l apero du jeudi soir avec les collegues, le repas de famille du dimanche, la baguette tradition sous le bras en sortant du metro, la terrasse de cafe un mardi matin, les soldes rue du Faubourg Saint-Antoine.
+
+STRUCTURE VIRALE OBLIGATOIRE POUR CHAQUE VERSION
+
+1. HOOK PERSONNEL ET AMBIGU entre 0 et 5 secondes
+Commence par : Aujourd hui au cabinet, je recois un prenom francais, son metier.
+Prenom 100% francais : Lea, Sophie, Nathalie, Marc, Thomas, Camille, Julie, Nicolas, Aurelie, Laurent, Isabelle, Kevin.
+Metier identifiable et parisien : caissiere du Monoprix, infirmiere de nuit a Lariboisiere, institutrice du 20eme, aide-soignante a Cochin, agent RATP ligne 13, facteur du 11eme, agent administratif a la mairie du 15eme, secretaire dans le 8eme, preparateur en pharmacie du 17eme.
+
+2. CONTEXTE DOULEUR IDENTIFIABLE entre 5 et 15 secondes
+Ca lance depuis des semaines, impossible de se pencher. Elle passe ses journees debout. Il enchaine les stations debout dans le RER A depuis des annees. Elle porte des charges toute la journee.
+
+3. DOUBLE SENS HUMORISTIQUE minimum 3 dans le script
+Je commence par une palpation approfondie. C est le moment de passer aux choses serieuses. Elle m a demande d y aller doucement. Je monte sur la table pour avoir plus de levier. Elle me dit que c est la premiere fois qu elle ressent ca. Je lui dis, on n a pas encore commence. En osteo on ne juge pas, on remet du mouvement.
+
+4. TERMES OSTEO PRECIS minimum 2 dans le script
+le sacrum, l amortisseur naturel du dos. le psoas, le muscle qu on appelle muscle de l ame. les fascias, ces membranes qui enveloppent tout. le nerf sciatique, celui qui irradie jusqu au pied. les cervicales, compressee a force de regarder un ecran. le diaphragme, le muscle qu on oublie toujours de liberer.
+
+5. TENSION ET REACTION entre 40 et 55 secondes
+Elle grimace, c est tout a fait normal. Je lui dis de respirer. Et la, je sens le tissu qui lache. On entend un petit craquement, elle me regarde avec les yeux ecarquilles.
+
+6. RESULTAT ET CHUTE HUMORISTIQUE AVEC ANCRE PARISIENNE entre 55 et 68 secondes
+Elle est repartie soulagee, direction la boulangerie de Cyril Lignac rue de Chaillot. J ai merite mon paris-brest du marche Raspail ce dimanche. En osteo on ne juge pas, on remet juste du mouvement. Dis-moi en commentaire si ton metier aussi te detruit le dos.
+
+INSPIRATION VIRALE
+Tu dois t inspirer de la trame, du rythme et de l humour du script viral fourni par l utilisateur, tout en respectant strictement la structure ci-dessus. Reproduis le meme niveau de spontaneite, le meme ton naturel et la meme energie que le script viral, mais avec le contenu osteo parisien. Ne copie pas le script viral mot pour mot, inspire-toi uniquement de sa structure narrative et de son humour.`;
+
+window.addEventListener('load', () => {
+  const saved = localStorage.getItem('osteo_api_key');
+  if (saved) {
+    document.getElementById('api-key-input').value = saved;
+    document.getElementById('saved-badge').style.display = 'inline';
+  }
+});
+
+function saveKey() {
+  const key = document.getElementById('api-key-input').value.trim();
+  if (!key) return;
+  localStorage.setItem('osteo_api_key', key);
+  const badge = document.getElementById('saved-badge');
+  badge.style.display = 'inline';
+  setTimeout(() => badge.style.display = 'none', 3000);
+}
+
+async function generateScripts() {
+  const apiKey = document.getElementById('api-key-input').value.trim() || localStorage.getItem('osteo_api_key');
+  const input = document.getElementById('viral-input').value.trim();
+
+  if (!apiKey) {
+    document.getElementById('status-msg').textContent = 'Entre ta cle API d abord.';
+    return;
+  }
+  if (!input) {
+    document.getElementById('status-msg').textContent = 'Colle un script viral avant de generer.';
+    return;
+  }
+
+  const btn = document.getElementById('gen-btn');
+  const statusEl = document.getElementById('status-msg');
+  const loadingBar = document.getElementById('loading-bar');
+  const grid = document.getElementById('versions-grid');
+
+  btn.disabled = true;
+  statusEl.textContent = 'Generation en cours...';
+  loadingBar.classList.add('active');
+  grid.classList.remove('visible');
+  ['v1','v2','v3','v4'].forEach(id => document.getElementById(id).textContent = '');
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 4000,
+        system: SYSTEM_PROMPT,
+        messages: [{
+          role: 'user',
+          content: 'Voici le script viral dont tu dois t inspirer pour la trame et l humour.\n\n' + input + '\n\nGenere maintenant 4 versions completes du script TikTok osteo parisien en suivant strictement la structure du prompt. Separe chaque version par VERSION 1, VERSION 2, VERSION 3, VERSION 4.'
+        }]
+      })
+    });
+
+    const data = await response.json();
+    if (data.error) {
+      statusEl.textContent = 'Erreur : ' + data.error.message;
+      return;
+    }
+    const fullText = data.content?.map(b => b.text || '').join('') || '';
+    const versions = parseVersions(fullText);
+    versions.forEach((text, i) => {
+      const el = document.getElementById('v' + (i + 1));
+      if (el) el.textContent = text.trim();
+    });
+    grid.classList.add('visible');
+    statusEl.textContent = '4 versions generees.';
+  } catch (err) {
+    statusEl.textContent = 'Erreur de connexion. Verifie ta cle et ta connexion.';
+  } finally {
+    btn.disabled = false;
+    loadingBar.classList.remove('active');
+  }
+}
+
+function parseVersions(text) {
+  const parts = text.split(/VERSION\s*[1-4]/i).filter(p => p.trim().length > 0);
+  while (parts.length < 4) parts.push('');
+  return parts.slice(0, 4);
+}
+
+function copyVersion(num, btn) {
+  const text = document.getElementById('v' + num).textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copie !';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copier'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+</script>
+</body>
+</html>
